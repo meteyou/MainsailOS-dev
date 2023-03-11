@@ -16,7 +16,7 @@ jobs:
         with:
           repository: "mainsail-crew/MainsailOS"
           latest: true
-          fileName: "${{ needs.build.outputs.base_name }}-raspberry-*.json"
+          fileName: "*-raspberry-*.json"
           out-file-path: "downloads"
 
       - name: Debug
