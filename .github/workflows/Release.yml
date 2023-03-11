@@ -234,8 +234,7 @@ jobs:
           result-encoding: string
           script: |
             const { name, description, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
-
-            return JSON.stringify({
+            const json = JSON.stringify({
               name,
               description,
               url,
@@ -247,6 +246,10 @@ jobs:
               image_download_size,
               image_download_sha256
             })
+
+
+
+            return json
 
       - name: Write JSON
         run: echo "${{steps.json.outputs.result}}" > "./${{ steps.copy-image.outputs.image }}.json"

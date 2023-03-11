@@ -71,10 +71,21 @@ jobs:
           script: |
             const downloadFolder = './downloads/'
             const fs = require('fs')
-            const os_list = [];
+            const os_list = []
 
             fs.readdirSync(downloadFolder).forEach(file => {
-               os_list.push(file)
+              fs.readFile("./customer.json", "utf8", (err, jsonString) => {
+                if (err) {
+                  console.log("Error reading file from disk:", err)
+                  return;
+                }
+                try {
+                  const os = JSON.parse(jsonString)
+                  os_list.push(os)
+                } catch (err) {
+                  console.log("Error parsing JSON string:", err)
+                }
+              })
             })
 
             const json = JSON.stringify({os_list})
