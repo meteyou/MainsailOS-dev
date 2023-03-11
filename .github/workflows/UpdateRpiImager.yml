@@ -1,6 +1,9 @@
 name: Update rpi-imager.json
 
 on:
+  push:
+    branches:
+      - "chore/fix-release-workflow"
   workflow_dispatch:
 
 jobs:
