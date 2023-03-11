@@ -7,6 +7,51 @@ on:
   workflow_dispatch:
 
 jobs:
+  write-json-test:
+    name: Write JSON test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate JSON
+        id: json
+        uses: actions/github-script@v6
+        env:
+          name: '"Mainsail OS 1.2.3"'
+          description: '"Type: 32-bit, SBC: RPI"'
+          url: '"https://github.com/mainsail-crew/MainsailOS/releases/download/123/456.img.xz"'
+          icon: '"https://os.mainsail.xyz/rpi-imager.png"'
+          init_format: '"systemd"'
+          release_date: '"1233243"'
+          extract_size: 1234
+          extract_sha256: '"adlksfoeiwhfwefkwhef"'
+          image_download_size: 123
+          image_download_sha256: '"a oishfkashdfk hasdfksa kdfhas"'
+        with:
+          result-encoding: string
+          script: |
+            const fs = require('fs')
+            const { name, description, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
+            const json = JSON.stringify({
+              name,
+              description,
+              url,
+              icon,
+              init_format,
+              release_date,
+              extract_size,
+              extract_sha256,
+              image_download_size,
+              image_download_sha256
+            })
+
+            fs.writeFileSync('./test.json', json);
+
+            return json
+
+      - name: Write JSON
+        run: |
+          cat ./test.json
+          echo "${{steps.json.outputs.result}}" > "./${{ steps.copy-image.outputs.image }}.json"
+
   update-rpi-imager:
     name: Update rpi-imager json
     runs-on: ubuntu-latest
