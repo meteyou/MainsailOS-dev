@@ -1,0 +1,71 @@
+name: Update rpi-imager.json
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-rpi-imager:
+    name: Update rpi-imager json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download snipes
+        uses: robinraju/release-downloader@v1.6
+        with:
+          repository: "mainsail-crew/MainsailOS"
+          fileName: "${{ needs.build.outputs.base_name }}-raspberry-*.json"
+          out-file-path: "downloads"
+
+      - name: Debug
+        run: |
+          ls ./downloads/*
+          touch rpi-imager.json
+
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Run script
+        uses: jannekem/run-python-script-action@v1
+        with:
+          script: |
+            import os, json, shutil
+            with open("rpi-imager.json", "r+") as t:
+              t.truncate(0)
+              t.write('{ "os_list": [')
+              for filename in os.scandir('downloads'):
+                print(filename)
+                with open(filename, "r") as f:
+                  content = f.read()
+                  t.write(content)
+                  t.write(',')
+              t.write('] }')
+            barak = open("rpi-imager.json", "r+")
+            contentb = barak.read()
+            print(contentb)
+
+#      - name: Upload JSON
+#        if: success()
+#        uses: xresloader/upload-to-github-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          release_id: ${{ needs.release.outputs.id }}
+#          file: rpi-imager.json
+
+      - name: Move in seperate dir
+        run: |
+          mkdir upload
+          mv rpi-imager.json ./upload
+          echo "::group::json output"
+          cat ./upload/rpi-imager.json
+          echo "::endgroup::"
+
+
+#      - name: Upload to remote server
+#        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+#        with:
+#          server: ${{ secrets.OSHOST }}
+#          username: ${{ secrets.OSUSER }}
+#          password: ${{ secrets.OSPASSWORD }}
+#          local-dir: ./upload/
