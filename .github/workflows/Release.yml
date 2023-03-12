@@ -128,14 +128,20 @@ jobs:
     steps:
       - name: Build image
         id: build
-        uses: mainsail-crew/MainsailOS-actions/build-image@master
+        uses: mainsail-crew/MainsailOS-actions/dummy-image@master
         with:
           config: ${{ matrix.config }}
           build-ref: master
 
+      - name: Upload failed Logfile
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failed-${{ steps.move-image.outputs.image }}.log
+          path: repository/src/build.log
+
       - name: Rename image file
         id: move-image
-        if: always()
         shell: bash
         run: |
           WORKSPACE=$(echo ${{ github.workspace }})
@@ -150,16 +156,6 @@ jobs:
           echo "base_name=${base_name}" >> $GITHUB_OUTPUT
           echo "image=${image}" >> $GITHUB_OUTPUT
 
-      - name: Upload failed Logfile
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: failed-${{ steps.move-image.outputs.image }}.log
-          path: repository/src/build.log
-
-      - name: Debug output
-        run: echo ${{ steps.move-image.outputs.image }}
-
       - name: Compressing Image
         shell: bash
         run: |
@@ -168,7 +164,6 @@ jobs:
           xz -efkvz9T"${CPU_COUNT}" ${{ steps.move-image.outputs.image }}.img || true
 
       - name: Upload Compressing Image
-        if: success()
         uses: xresloader/upload-to-github-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -239,8 +234,9 @@ jobs:
         with:
           result-encoding: string
           script: |
+            const fs = require('fs')
             const { name, description, type, sbc, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
-            if (type === 'raspberry' && sbc === 'rpi32) name += '(recommend)'
+            if (type === 'raspberry' && sbc === 'rpi32) name += ' (recommend)'
 
             const json = JSON.stringify({
               name,
@@ -255,10 +251,7 @@ jobs:
               image_download_sha256
             })
 
-            return json
-
-      - name: Write JSON
-        run: echo "${{steps.json.outputs.result}}" > "./${{ steps.move-image.outputs.image }}.json"
+            fs.writeFileSync("./${{ steps.move-image.outputs.image }}.json", json)
 
       - name: Upload JSON
         if: success()
