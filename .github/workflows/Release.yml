@@ -237,7 +237,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const { name, description, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
+            const { name, description, type, sbc, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
             if (type === 'raspberry' && sbc === 'rpi32) name += '(recommend)'
 
             const json = JSON.stringify({
