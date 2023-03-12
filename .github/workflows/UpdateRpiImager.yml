@@ -81,6 +81,7 @@ jobs:
                 }
                 try {
                   const os = JSON.parse(jsonString)
+                  console.log(os)
                   os_list.push(os)
                 } catch (err) {
                   console.log("Error parsing JSON string:", err)
@@ -91,30 +92,6 @@ jobs:
             const json = JSON.stringify({os_list})
             console.log(json)
             fs.writeFileSync('rpi-imager.json', json)
-
-      - name: setup python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Run script
-        uses: jannekem/run-python-script-action@v1
-        with:
-          script: |
-            import os, json, shutil
-            with open("rpi-imager.json", "r+") as t:
-              t.truncate(0)
-              t.write('{ "os_list": [')
-              for filename in os.scandir('downloads'):
-                print(filename)
-                with open(filename, "r") as f:
-                  content = f.read()
-                  t.write(content)
-                  t.write(',')
-              t.write('] }')
-            barak = open("rpi-imager.json", "r+")
-            contentb = barak.read()
-            print(contentb)
 
 #      - name: Upload JSON
 #        if: success()
