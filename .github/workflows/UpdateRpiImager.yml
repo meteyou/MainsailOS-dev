@@ -74,12 +74,8 @@ jobs:
             const os_list = []
 
             fs.readdirSync(downloadFolder).forEach(file => {
-              fs.readFile('./downloads/' + file, "utf8", (err, jsonString) => {
-                if (err) {
-                  console.log("Error reading file from disk:", err)
-                  return;
-                }
-                try {
+              const raw = fs.readFileSync('./downloads/' + file, {encoding:'utf8', flag:'r'})
+              try {
                   const os = JSON.parse(jsonString)
                   console.log(os)
                   os_list.push(os)
