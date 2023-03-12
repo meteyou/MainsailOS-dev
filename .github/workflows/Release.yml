@@ -120,7 +120,7 @@ jobs:
     needs: [ release, matrix ]
     runs-on: ubuntu-latest
     outputs:
-      base_name: ${{ steps.copy-image.outputs.base_name }}
+      base_name: ${{ steps.move-image.outputs.base_name }}
     strategy:
       fail-fast: false
       matrix:
