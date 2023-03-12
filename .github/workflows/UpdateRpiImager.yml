@@ -76,7 +76,7 @@ jobs:
             fs.readdirSync(downloadFolder).forEach(file => {
               const raw = fs.readFileSync('./downloads/' + file, {encoding:'utf8', flag:'r'})
               try {
-                const os = JSON.parse(jsonString)
+                const os = JSON.parse(raw)
                 console.log(os)
                 os_list.push(os)
               } catch (err) {
