@@ -236,7 +236,7 @@ jobs:
           script: |
             const fs = require('fs')
             const { name, description, type, sbc, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
-
+            //if (type === 'raspberry' && sbc === 'rpi32) name += ' (recommend)'
 
             const json = JSON.stringify({
               name,
@@ -252,6 +252,11 @@ jobs:
             })
 
             fs.writeFileSync("./${{ steps.move-image.outputs.image }}.json", json)
+
+      - name: Debug output
+        shell: bash
+        run: |
+          cat "./${{ steps.move-image.outputs.image }}.json"
 
       - name: Upload JSON
         if: success()
