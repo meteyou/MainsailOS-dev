@@ -204,16 +204,16 @@ jobs:
 
       - name: Debug output
         run: |
-          echo ${{ needs.release.outputs.id }}
-          echo ${{ needs.release.outputs.version }}
+          echo "release-id: ${{ needs.release.outputs.id }}"
+          echo "release-version: ${{ needs.release.outputs.version }}"
 
-          echo ${{ steps.move-image.outputs.image }}
+          echo "image-name: ${{ steps.move-image.outputs.image }}"
 
-          echo ${{ steps.checksums.outputs.image }}
-          echo ${{ steps.checksums.outputs.zip }}
+          echo "checksum image: ${{ steps.checksums.outputs.image }}"
+          echo "checksum zip: ${{ steps.checksums.outputs.zip }}"
 
-          echo ${{ steps.filesizes.outputs.image }}
-          echo ${{ steps.filesizes.outputs.zip }}
+          echo "filesize-image: ${{ steps.filesizes.outputs.image }}"
+          echo "filesize-zip: ${{ steps.filesizes.outputs.zip }}"
 
       - name: Generate JSON
         id: json
@@ -236,7 +236,7 @@ jobs:
           script: |
             const fs = require('fs')
             const { name, description, type, sbc, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
-            if (type === 'raspberry' && sbc === 'rpi32) name += ' (recommend)'
+
 
             const json = JSON.stringify({
               name,
