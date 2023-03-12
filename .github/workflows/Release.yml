@@ -236,7 +236,8 @@ jobs:
           script: |
             const fs = require('fs')
             const { name, description, type, sbc, url, icon, init_format, release_date, extract_size, extract_sha256, image_download_size, image_download_sha256 } = process.env
-            //if (type === 'raspberry' && sbc === 'rpi32) name += ' (recommend)'
+            if (sbc === 'rpi32') name += ' 32-Bit (recommend)'
+            else if (sbc === 'rpi64') name += ' 64-Bit'
 
             const json = JSON.stringify({
               name,
