@@ -220,16 +220,16 @@ jobs:
         id: json
         uses: actions/github-script@v6
         env:
-          name: '"Mainsail OS ${{ github.event.inputs.version }}"'
-          description: '"Type: ${{ steps.build.outputs.type }}, SBC: ${{ steps.build.outputs.sbc }}"'
-          url: '"https://github.com/mainsail-crew/MainsailOS/releases/download/${{ github.event.inputs.version }}/${{ steps.copy-image.outputs.image }}.img.xz"'
-          icon: '"https://os.mainsail.xyz/rpi-imager.png"'
-          init_format: '"systemd"'
-          release_date: '"${{ needs.release.outputs.date }}"'
+          name: "Mainsail OS ${{ github.event.inputs.version }}"
+          description: "Type: ${{ steps.build.outputs.type }}, SBC: ${{ steps.build.outputs.sbc }}"
+          url: "https://github.com/mainsail-crew/MainsailOS/releases/download/${{ github.event.inputs.version }}/${{ steps.copy-image.outputs.image }}.img.xz"
+          icon: "https://os.mainsail.xyz/rpi-imager.png"
+          init_format: "systemd"
+          release_date: "${{ needs.release.outputs.date }}"
           extract_size: ${{ steps.filesizes.outputs.image }}
-          extract_sha256: '"${{ steps.checksums.outputs.image }}"'
+          extract_sha256: "${{ steps.checksums.outputs.image }}"
           image_download_size: ${{ steps.filesizes.outputs.zip }}
-          image_download_sha256: '"${{ steps.checksums.outputs.zip }}"'
+          image_download_sha256: "${{ steps.checksums.outputs.zip }}"
         with:
           result-encoding: string
           script: |
@@ -246,8 +246,6 @@ jobs:
               image_download_size,
               image_download_sha256
             })
-
-
 
             return json
 
@@ -287,34 +285,27 @@ jobs:
           fileName: "${{ needs.build.outputs.base_name }}-raspberry-*.json"
           out-file-path: "downloads"
 
-      - name: Debug
-        run: |
-          ls ./downloads/*
-          touch rpi-imager.json
-
-      - name: setup python
-        uses: actions/setup-python@v2
+      - name: Combine JSON
+        id: json
+        uses: actions/github-script@v6
         with:
-          python-version: 3.8
-
-      - name: Run script
-        uses: jannekem/run-python-script-action@v1
-        with:
+          result-encoding: string
           script: |
-            import os, json, shutil
-            with open("rpi-imager.json", "r+") as t:
-              t.truncate(0)
-              t.write('{ "os_list": [')
-              for filename in os.scandir('downloads'):
-                print(filename)
-                with open(filename, "r") as f:
-                  content = f.read()
-                  t.write(content)
-                  t.write(',')
-              t.write('] }')
-            barak = open("rpi-imager.json", "r+")
-            contentb = barak.read()
-            print(contentb)
+            const downloadFolder = './downloads/'
+            const fs = require('fs')
+            const os_list = []
+
+            fs.readdirSync(downloadFolder).forEach(file => {
+              const raw = fs.readFileSync('./downloads/' + file, {encoding:'utf8', flag:'r'})
+              try {
+                os_list.push(JSON.parse(raw))
+              } catch (err) {
+                console.log("Error parsing JSON string:", err)
+              }
+            })
+
+            const json = JSON.stringify({os_list})
+            fs.writeFileSync('rpi-imager.json', json)
 
       - name: Upload JSON
         if: success()
@@ -329,6 +320,9 @@ jobs:
         run: |
           mkdir upload
           mv rpi-imager.json ./upload
+          echo "::group::json output"
+          cat ./upload/rpi-imager.json
+          echo "::endgroup::"
 
       - name: Upload to remote server
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
