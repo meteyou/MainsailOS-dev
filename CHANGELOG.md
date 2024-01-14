@@ -3,10 +3,12 @@
 All notable changes to Mainsail will be documented in this file.
 
 ## [unreleased]
-### Features
+### 1
 
 - **build**: Removed raspicam and serialcomm module (#83) | [27e8e7c](27e8e7cea78d436b3f47c24f471bb6d2ac6ce3ec)
 - **moonraker.conf**: Add mainsail subscription to announcements (#115) | [a45c67e](a45c67efd3750be80bc05b54372835f2af1d5dc5)
+- Allow the app.fluidd.xyz origin | [0da63fd](0da63fd1a84af756b54a77607628523cfc391033)
+- Add multi mjpegstreamer support in klipper_config dir (#35) | [e7d956a](e7d956ac56238324361b37b1c95281ec94942a8e)
 - Add park to CANCEL_PRINT (#58) | [00169c7](00169c709b8d144f70849e1d0b7ed43a349c6772)
 - Replaced module busterpatch (#77) | [abaeec6](abaeec6f10eb255d470c680608e6fa99b63cbbd0)
 - Added .editorconfig (#78) | [67ae0d4](67ae0d4750788bf66fe891fbffcfa8381e2043cf)
@@ -22,8 +24,11 @@ All notable changes to Mainsail will be documented in this file.
 - Enable I2C by default (#196) | [9cebd0c](9cebd0c8545fa41a826112658dfe401b4306a2bd)
 - Add Orange Pi 3 and 4 LTS (#186) | [2f556c3](2f556c3232b3d01ac48d30e08ae230cd5fda13fe)
 - Add orange pi zero2 (#189) | [df2aa35](df2aa3528142f144b1c9928f90458c3a6d6c78c7)
+- Add BananaPi M2 Zero (#247) | [9cb55a7](9cb55a72871dac1703da7b51c9e5f4dec41945e8)
+- Adds kiauh module for homebrewed images (#184) | [6c95a7b](6c95a7bb4075d7cac01fa4c63088da5189d26714)
+- Add python3-opencv for obico (#248) | [01a3b73](01a3b7351c1c715ad484b13444b4b5eccc95dda5)
 
-### Bug Fixes and Improvements
+### 2 Fixes and Improvements
 
 - **build**: Updated download paths (#65) | [0622a2f](0622a2f60a8e39237c1fd213d67932ae6c986e08)
 - **build**: Fixes error in Makefile (#76) | [0ff09b5](0ff09b5ac0503e8cee0c35a298a41a26344b57c8)
@@ -58,8 +63,17 @@ All notable changes to Mainsail will be documented in this file.
 - Fix broken udev package (#224) | [b07d7a1](b07d7a103a2aad81045c26dc7223c26369ee1322)
 - Fix udev for version 'rp1+deb11u2' (#226) | [b0343d5](b0343d55ddb9db0126f4fb9759e050d5fbcbb10e)
 - Remove legacy cam stack (#227) | [8c65ad7](8c65ad7045bf2ada360b0f1307f599aea73d7d4f)
+- Fix error in udev-fix.sh (#228) | [332109a](332109ae2fa928d3728cb388ddea4e121f9977e4)
+- Add crowsnest log path & pkglist link in postrename script (#235) | [7084fd8](7084fd807b4ccf40cef9335e0bed263f018d2e00)
+- Fix typo in tools_dir var, Line171 (#237) | [f02179d](f02179d75749a163d74ecc9bf20deefe3fdbb3d1)
+- Fix wifi connectivity (#240) | [55b253e](55b253e959572ac9722c21c5902b18e531089e2b)
+- Fix armbian-release file error (#241) | [4855416](485541641b11b8fdb4e6c7b7fceb67eac47e7e83)
+- Fix error autologin on serial tty (#242) | [be13745](be13745d17780c85baa43d59a40dca565dd9f5b0)
+- Fix 'is_board_type' function (#243) | [c24e95b](c24e95b8d701b7a3a08d91d4666bcb9beb249758)
+- Fix Torrent and Checksum download URLs (#244) | [660b0ba](660b0badb9d48fc7e3f16495e493500110bc3dba)
+- Removing 'klippy' alias (#246) | [c8521b2](c8521b2c2c67bd8a8437c9817ee7ea94447394a0)
 
-### Refactor
+### 4
 
 - **klipper**: Refactor klipper and is-pre-install module (#113) | [1a8cd48](1a8cd482f8059675f925092af55a4281f786312a)
 - **mainsail.cfg**: Substituting `/home/pi` with `~` (#114) | [338eb8e](338eb8e8e3d86b0cf2714cd574229089d7889d40)
@@ -71,7 +85,7 @@ All notable changes to Mainsail will be documented in this file.
 - Use mv to move the image from the workspace to the root (#203) | [b7acb1e](b7acb1e49c02d2d9f50dfdc3541c10f4f2b2becc)
 - Drop armbian_pkgupgrade (#210) | [799a919](799a919c2c4f2f8bf46971de88a79ab7d0bea137)
 
-### Documentation
+### 7
 
 - Improve reamde.md (#54) | [3e6d1a5](3e6d1a5d62dcdd12d9c2672908ee801b6dc71733)
 - Fix typo in readme.md (#91) | [6ffadca](6ffadca6669f3ce8e2140ed27dddd1a2af1bbea2)
@@ -79,17 +93,21 @@ All notable changes to Mainsail will be documented in this file.
 - Add mainsailos logo (#124) | [0664678](0664678dca265eb898dd18581e2250c5dda34302)
 - Update README for improved readability (#144) | [af3d78b](af3d78bdb9eb5090f3b3a092d98c28b0ac25d147)
 - Adds faq section | [96c21d5](96c21d5fb1782c9ba80207ff30efd14760f607c3)
+- Fix broken README link to the docs (#231) | [ba3d582](ba3d5824c6cf05e0c557c40348da75098015f16d)
 
-### Other
+### 9
 
 - **README**: Update README according to latest changes. (#110) | [e4ec596](e4ec596da09b131b19b838762b2495f183f2c01c)
+- **build**: 0.5.0 bump | [ceb9417](ceb941764470c26824a2d578b6760f9ab762ba73)
 - **build**: Refactor build dependend files (#154) | [d0d6375](d0d63759c18968b6fabcdf2e30040367fbdedcde)
+- **build**: Add new matrix workflow (#253) | [b4e2b3d](b4e2b3dfb387276ce73171b5feadb600e89fe98d)
 - **crowsnest**: Update crowsnest module (#123) | [4d034c8](4d034c81acd7fd099faf6a5e7e5c65a8de1ea7a8)
 - **docs**: Fix urls, add includes (#122) | [0b0b0e0](0b0b0e0c7586fd592596606fbaaf45d2464c0f23)
 - **klipper**: Update klipper and input shaper to py3 (#105) | [180724b](180724b28629849026b81f7ebb92e5c2a9630b50)
 - **moonraker**: Refactored moonraker module (#89) | [e5155fd](e5155fd717ab2f86a13230810b6140973946e89f)
 - **workflow**: Rework release workflow for multi builds (#181) | [eacef2f](eacef2f77d3204ff4f642988d5b8a8ef87b18a1a)
 - **workflows**: Update pull_request trigger | [32464f2](32464f2c648d5bd32c718b873e7c013866a99113)
+- Moves $httpupgrade and upstream servers to common config | [0f9bd4d](0f9bd4d011e8eee37b731e82c2419193e8a6136e)
 - Update default moonraker.conf | [cdea2ec](cdea2ecbd121c0ec350b6cecaa5e925714f08a11)
 - Remove job_queue and postprocessing from moonraker.conf | [19d2b9d](19d2b9deb9e294d25393d9696d99e8d7af65a71e)
 - Updated .editorconfig for yml files (#86) | [7cbf70b](7cbf70b8eb1ee20b2b26ecaa13e3ebbf85d9ef96)
@@ -122,4 +140,8 @@ All notable changes to Mainsail will be documented in this file.
 - Remove unattended-upgrades service (#215) | [9f09363](9f093631d22b4cb00cc57601ed55bc51e23e40e0)
 - Revert firstboot fix (#219) | [02e0100](02e01006c7d1d84efcaee6fb7a64045084ed8667)
 - Update crowsnest module (#221) | [726239c](726239ca7db82c3867af3c28785cae0ca7b2e3eb)
+- Update download urls for armbian & orangepi (#233) | [417ed1f](417ed1f1d8ebd5950931dca2b5a04ef412e67035)
+- Update .gitignore (#254) | [9fa81dd](9fa81ddbd13cbc0c91c12b7f496779654b48f858)
+- Refactor build & release workflow to remove external actions (#264) | [5944e36](5944e36b0e6ebcf7555527fad6c973ba4a42d9ac)
+- Update issue bot text (#265) | [9e52bb8](9e52bb8872abe753ee5ba7cf403bca56d6ea6c07)
 
