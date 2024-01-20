@@ -4,14 +4,15 @@
 
 get_version() {
     local ver
+    ver="$(realpath "$( dirname -- "${BASH_SOURCE[0]}")"/../src/version)"
+
+    if [ -f "${ver}" ]; then
+        cat "${ver}"
+        return
+    fi
+
     ver="$(realpath "$( dirname -- "${BASH_SOURCE[0]}")"/version)"
     cat "${ver}"
-}
-
-get_version_path() {
-    local ver
-    ver="$(realpath "$( dirname -- "${BASH_SOURCE[0]}")"/version)"
-    echo "${ver}"
 }
 
 get_img_name() {
@@ -29,7 +30,6 @@ get_img_name() {
 }
 
 DIST_VERSION="$(get_version)"
-DIST_VERSION_PATH="$(get_version_path)"
 BASE_ZIP_IMG="$(get_img_name)"
 DIST_NAME="MainsailOS"
 

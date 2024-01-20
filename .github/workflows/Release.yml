@@ -139,7 +139,6 @@ jobs:
         run: |
           source repository/config/default
           echo "${DIST_VERSION}"
-          echo "${DIST_VERSION_PATH}"
 
       - name: Build image
         id: build
