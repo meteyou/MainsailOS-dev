@@ -2,6 +2,11 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [1.3.7](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.3.7) - 2024-01-20
+### Bug Fixes and Improvements
+
+- Test version output
+
 ## [1.3.6](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.3.6) - 2024-01-20
 ### Features
 
