@@ -137,7 +137,7 @@ jobs:
       - name: Get version number
         shell: bash
         run: |
-          source repository/src/config
+          source repository/config/default
           echo "${DIST_VERSION}"
           echo "${DIST_VERSION_PATH}"
 
