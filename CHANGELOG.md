@@ -2,7 +2,7 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
-## [1.3.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.3.0) - 2024-01-16
+## [1.3.6](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.3.6) - 2024-01-20
 ### Features
 
 - Add BananaPi M2 Zero ([#247](https://github.com/mainsail-crew/MainsailOS/pull/247))
@@ -11,6 +11,13 @@ All notable changes to MainsailOS will be documented in this file.
 
 ### Bug Fixes and Improvements
 
+- Remove enduser support msg from zero2 images ([#209](https://github.com/mainsail-crew/MainsailOS/pull/209))
+- Fix rpi-imager json value format for extract_size & image_download_size ([#212](https://github.com/mainsail-crew/MainsailOS/pull/212))
+- Fix firstboot issue ([#214](https://github.com/mainsail-crew/MainsailOS/pull/214))
+- Load `i2c-dev` modules ([#217](https://github.com/mainsail-crew/MainsailOS/pull/217))
+- Fix broken udev package ([#224](https://github.com/mainsail-crew/MainsailOS/pull/224))
+- Fix udev for version 'rp1+deb11u2' ([#226](https://github.com/mainsail-crew/MainsailOS/pull/226))
+- Remove legacy cam stack ([#227](https://github.com/mainsail-crew/MainsailOS/pull/227))
 - Fix error in udev-fix.sh ([#228](https://github.com/mainsail-crew/MainsailOS/pull/228))
 - Add crowsnest log path & pkglist link in postrename script ([#235](https://github.com/mainsail-crew/MainsailOS/pull/235))
 - Fix typo in tools_dir var, Line171 ([#237](https://github.com/mainsail-crew/MainsailOS/pull/237))
@@ -21,6 +28,14 @@ All notable changes to MainsailOS will be documented in this file.
 - Fix Torrent and Checksum download URLs ([#244](https://github.com/mainsail-crew/MainsailOS/pull/244))
 - Removing 'klippy' alias ([#246](https://github.com/mainsail-crew/MainsailOS/pull/246))
 - Fix motd on armbian and orange pi based images ([#272](https://github.com/mainsail-crew/MainsailOS/pull/272))
+- Fix version number export
+- Test version output
+- Test version output
+- Test version output
+
+### Refactor
+
+- Drop armbian_pkgupgrade ([#210](https://github.com/mainsail-crew/MainsailOS/pull/210))
 
 ### Documentation
 
@@ -29,6 +44,9 @@ All notable changes to MainsailOS will be documented in this file.
 ### Other
 
 - **build**: Add new matrix workflow ([#253](https://github.com/mainsail-crew/MainsailOS/pull/253))
+- Remove unattended-upgrades service ([#215](https://github.com/mainsail-crew/MainsailOS/pull/215))
+- Revert firstboot fix ([#219](https://github.com/mainsail-crew/MainsailOS/pull/219))
+- Update crowsnest module ([#221](https://github.com/mainsail-crew/MainsailOS/pull/221))
 - Update download urls for armbian & orangepi ([#233](https://github.com/mainsail-crew/MainsailOS/pull/233))
 - Update .gitignore ([#254](https://github.com/mainsail-crew/MainsailOS/pull/254))
 - Refactor build & release workflow to remove external actions ([#264](https://github.com/mainsail-crew/MainsailOS/pull/264))
@@ -36,35 +54,7 @@ All notable changes to MainsailOS will be documented in this file.
 - Update generate json to new format ([#266](https://github.com/mainsail-crew/MainsailOS/pull/266))
 - Fix typo in bot text ([#273](https://github.com/mainsail-crew/MainsailOS/pull/273))
 
-## [1.2.1](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.2.1) - 2023-05-26
-### Bug Fixes and Improvements
-
-- Remove legacy cam stack ([#227](https://github.com/mainsail-crew/MainsailOS/pull/227))
-
-## [1.2.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.2.0) - 2023-05-23
-### Bug Fixes and Improvements
-
-- Load `i2c-dev` modules ([#217](https://github.com/mainsail-crew/MainsailOS/pull/217))
-- Fix broken udev package ([#224](https://github.com/mainsail-crew/MainsailOS/pull/224))
-- Fix udev for version 'rp1+deb11u2' ([#226](https://github.com/mainsail-crew/MainsailOS/pull/226))
-
-### Other
-
-- Remove unattended-upgrades service ([#215](https://github.com/mainsail-crew/MainsailOS/pull/215))
-- Revert firstboot fix ([#219](https://github.com/mainsail-crew/MainsailOS/pull/219))
-- Update crowsnest module ([#221](https://github.com/mainsail-crew/MainsailOS/pull/221))
-
-## [1.1.1](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.1.1) - 2023-03-26
-### Bug Fixes and Improvements
-
-- Fix rpi-imager json value format for extract_size & image_download_size ([#212](https://github.com/mainsail-crew/MainsailOS/pull/212))
-- Fix firstboot issue ([#214](https://github.com/mainsail-crew/MainsailOS/pull/214))
-
-### Refactor
-
-- Drop armbian_pkgupgrade ([#210](https://github.com/mainsail-crew/MainsailOS/pull/210))
-
-## [1.1.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.1.0) - 2023-03-18
+## [1.1.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.1.0) - 2023-03-15
 ### Features
 
 - Enable I2C by default ([#196](https://github.com/mainsail-crew/MainsailOS/pull/196))
@@ -74,23 +64,6 @@ All notable changes to MainsailOS will be documented in this file.
 ### Bug Fixes and Improvements
 
 - **build**: Fix mv of image file ([#204](https://github.com/mainsail-crew/MainsailOS/pull/204))
-- Fix compress step ([#205](https://github.com/mainsail-crew/MainsailOS/pull/205))
-- Fix rpi-image.json workflow in Release.yml ([#206](https://github.com/mainsail-crew/MainsailOS/pull/206))
-- Remove enduser support msg from zero2 images ([#209](https://github.com/mainsail-crew/MainsailOS/pull/209))
-
-### Refactor
-
-- Use mv to move the image from the workspace to the root ([#203](https://github.com/mainsail-crew/MainsailOS/pull/203))
-
-## [1.0.1](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.0.1) - 2022-12-30
-### Bug Fixes and Improvements
-
-- Fix shellcheck errors ([#185](https://github.com/mainsail-crew/MainsailOS/pull/185))
-- Fix syntax error in net module ([#191](https://github.com/mainsail-crew/MainsailOS/pull/191))
-
-## [1.0.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.0.0) - 2022-12-18
-### Bug Fixes and Improvements
-
 - **lint**: Should fix shellcheck warnings ([#160](https://github.com/mainsail-crew/MainsailOS/pull/160))
 - Fix postrename script ([#150](https://github.com/mainsail-crew/MainsailOS/pull/150))
 - Fix shellcheck errors in net module ([#161](https://github.com/mainsail-crew/MainsailOS/pull/161))
@@ -98,11 +71,16 @@ All notable changes to MainsailOS will be documented in this file.
 - Add otg_mode=1 for CM4 in config.txt ([#167](https://github.com/mainsail-crew/MainsailOS/pull/167))
 - Fix SC2086 in armbian module ([#173](https://github.com/mainsail-crew/MainsailOS/pull/173))
 - Fixes error setting link to macro ([#175](https://github.com/mainsail-crew/MainsailOS/pull/175))
+- Fix shellcheck errors ([#185](https://github.com/mainsail-crew/MainsailOS/pull/185))
+- Fix syntax error in net module ([#191](https://github.com/mainsail-crew/MainsailOS/pull/191))
+- Fix compress step ([#205](https://github.com/mainsail-crew/MainsailOS/pull/205))
+- Fix rpi-image.json workflow in Release.yml ([#206](https://github.com/mainsail-crew/MainsailOS/pull/206))
 
 ### Refactor
 
 - Deactivate IPv6 in nginx per default ([#157](https://github.com/mainsail-crew/MainsailOS/pull/157))
 - Change behavior of piconfig module ([#180](https://github.com/mainsail-crew/MainsailOS/pull/180))
+- Use mv to move the image from the workspace to the root ([#203](https://github.com/mainsail-crew/MainsailOS/pull/203))
 
 ### Documentation
 
