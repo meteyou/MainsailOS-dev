@@ -2,12 +2,6 @@
 # Shebang for better file detection
 # shellcheck enable=require-variable-braces
 
-get_version() {
-    local ver
-    ver="$(realpath "$( dirname -- "${BASH_SOURCE[0]}")"/version)"
-    cat "${ver}"
-}
-
 get_img_name() {
     local -a types
     types=(zip 7z xz)
@@ -22,7 +16,10 @@ get_img_name() {
     fi
 }
 
-DIST_VERSION="$(get_version)"
+# get path of the repo
+BASE_PATH="$(realpath "$( dirname $0)/../")"
+
+DIST_VERSION="$(cat "${BASE_PATH}/src/version")"
 BASE_ZIP_IMG="$(get_img_name)"
 DIST_NAME="MainsailOS"
 
