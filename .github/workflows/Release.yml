@@ -134,6 +134,13 @@ jobs:
           path: repository
           submodules: true
 
+      - name: Get version number
+        shell: bash
+        run: |
+          source repository/src/config
+          echo "${DIST_VERSION}"
+          echo "${DIST_VERSION_PATH}"
+
       - name: Build image
         id: build
         uses: ./repository/.github/actions/build
