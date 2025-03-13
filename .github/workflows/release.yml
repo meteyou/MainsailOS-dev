@@ -210,11 +210,67 @@ jobs:
           xz -efkvz9T"${CPU_COUNT}" ${{ env.IMAGE }} || true
 
       - name: "🔐 Create hash"
+        id: hashes
         working-directory: ./build
         run: |
           sha256sum ${{ env.IMAGE }} > ${{ env.IMAGE }}.sha256
-          sha256sum ${{ env.IMAGE }}.xz > ${{ env.IMAGE }}.xz.sha256
+          image_checksum=`cat ${{ env.IMAGE }}.sha256 | awk '{ print $1 }'`
+          echo "image=${image_checksum}" >> $GITHUB_OUTPUT
 
+          sha256sum ${{ env.IMAGE }}.xz > ${{ env.IMAGE }}.xz.sha256
+          zip_checksum=`cat ${{ env.IMAGE }}.xz.sha256 | awk '{ print $1 }'`
+          echo "zip=${zip_checksum}" >> $GITHUB_OUTPUT
+
+      - name: "Calculating filesizes"
+        id: filesizes
+        working-directory: ./build
+        run: |
+          image_filesize=`wc -c ${{ env.IMAGE }} | awk '{print $1}'`
+          echo "image=${image_filesize}" >> $GITHUB_OUTPUT
+
+          zip_filesize=`wc -c ${{ env.IMAGE }}.xz | awk '{print $1}'`
+          echo "zip=${zip_filesize}" >> $GITHUB_OUTPUT
+
+      - name: "🔧 Generate RPI JSON file"
+        if: ${{ matrix.rpi_json != null }}
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          from datetime import datetime
+
+          matrix = ${{ toJson(matrix) }}
+
+          name = matrix.get('name', '')
+          release_tag = os.environ.get("RELEASE_TAG", "unknown")
+          today = datetime.now().strftime("%Y-%m-%d")
+
+          if 'rpi_json' in matrix and matrix['rpi_json']:
+              rpi_data = matrix['rpi_json'].copy()
+
+              # replace $VERSION$ in name
+              if 'name' in rpi_data:
+                  rpi_data['name'] = rpi_data['name'].replace('$VERSION$', release_tag)
+
+              # Feste Werte setzen
+              filename = "${{ env.IMAGE }}.xz"
+              rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/{release_tag}/{filename}"
+              rpi_data['release_date'] = today
+              rpi_data['extract_size'] = ${{ steps.filesizes.outputs.image }}
+              rpi_data['image_download_size'] = ${{ steps.filesizes.outputs.zip }}
+              rpi_data['extract_sha256'] = "${{ steps.hashes.outputs.image }}"
+
+              os.makedirs('build', exist_ok=True)
+              json_path = "build/${{ env.IMAGE }}.json"
+              with open(json_path, 'w') as f:
+                  json.dump(rpi_data, f, indent=2)
+                  print(f"Generated JSON file for {name}")
+          EOF
+
+      - name: "📋 Upload JSON"
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.IMAGE }}.json
+          path: build/${{ env.IMAGE }}.json
       - name: "📋 Upload Compressed Image"
         uses: actions/upload-artifact@v4
         with:
