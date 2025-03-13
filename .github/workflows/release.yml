@@ -185,7 +185,7 @@ jobs:
 #          config: "${{ github.workspace }}/config.local"
 #          environment: '{ "RELEASE_TAG": "${{ env.RELEASE_TAG }}"}'
 
-      - name: ""🏗 Create fake CustoPiZer"
+      - name: "🏗 Create fake CustoPiZer"
         working-directory: ./build
         run: |
           echo "Creating fake CustoPiZer build..."
