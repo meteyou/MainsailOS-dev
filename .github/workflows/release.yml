@@ -177,13 +177,19 @@ jobs:
         working-directory: ./scripts
         run: ls -la
 
-      - name: "🏗 Run CustoPiZer"
-        uses: OctoPrint/CustoPiZer@v1
-        with:
-          workspace: "${{ github.workspace }}/build"
-          scripts:  "${{ github.workspace }}/scripts"
-          config: "${{ github.workspace }}/config.local"
-          environment: '{ "RELEASE_TAG": "${{ env.RELEASE_TAG }}"}'
+#      - name: "🏗 Run CustoPiZer"
+#        uses: OctoPrint/CustoPiZer@v1
+#        with:
+#          workspace: "${{ github.workspace }}/build"
+#          scripts:  "${{ github.workspace }}/scripts"
+#          config: "${{ github.workspace }}/config.local"
+#          environment: '{ "RELEASE_TAG": "${{ env.RELEASE_TAG }}"}'
+
+      - name: ""🏗 Create fake CustoPiZer"
+        working-directory: ./build
+        run: |
+          echo "Creating fake CustoPiZer build..."
+          mv input.img output.img
 
       - name: "✏ Rename image"
         working-directory: ./build
@@ -235,6 +241,7 @@ jobs:
       - name: "📥 Checkout"
         uses: actions/checkout@v4
         with:
+          ref: "develop"
           fetch-depth: 0
 
       - name: "Generate changelog"
@@ -265,7 +272,7 @@ jobs:
           for asset_dir in artifacts/*; do
             for asset in "$asset_dir"/*; do
               echo "Uploading: $asset"
-              gh release upload v${{ needs.prepare.outputs.release_tag }} "$asset" --clobber
+              gh release upload ${{ needs.prepare.outputs.release_tag }} "$asset" --clobber
             done
           done
         env:
@@ -280,7 +287,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: "develop"
-          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: "Generate a changelog"
