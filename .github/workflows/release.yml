@@ -272,7 +272,7 @@ jobs:
           json_path = "build/${{ env.IMAGE }}.json"
           with open(json_path, 'w') as f:
               json.dump(rpi_data, f, indent=2)
-              print(f"Generated JSON file for {name}")
+              print("Generated JSON file for ${{ env.IMAGE }}.json")
 
           EOF
 
