@@ -251,10 +251,6 @@ jobs:
 
           matrix = ${{ toJson(matrix) }}
 
-          # skip if rpi_json is not defined
-          if 'rpi_json' not in matrix:
-              return
-
           rpi_data = matrix['rpi_json'].copy()
 
           # set name, if it is not set
