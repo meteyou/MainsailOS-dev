@@ -218,7 +218,8 @@ jobs:
         run: |
           CPU_COUNT="$(nproc)"
           echo -e "\e[32mUsing ${CPU_COUNT} Cores for compression...\e[0m"
-          xz -efkvz9T"${CPU_COUNT}" ${{ env.IMAGE }} || true
+          #xz -efkvz9T"${CPU_COUNT}" ${{ env.IMAGE }} || true
+          touch ${{ env.IMAGE }}.xz
 
       - name: "🔐 Create hash"
         id: hashes
