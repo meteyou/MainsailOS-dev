@@ -16,9 +16,11 @@ on:
         required: false
 
 jobs:
-  push-tag:
+  prepare-release:
     if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.create_release.outputs.id }}
     steps:
       - name: "📥 Checkout"
         uses: actions/checkout@v4
@@ -45,6 +47,17 @@ jobs:
           git add VERSION
           git commit -m "chore: bump version to v${{ github.event.inputs.version }}"
           git push
+
+      - name: "Create Release"
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: MainsailOS ${{ github.event.inputs.version }}
+          body: ${{ steps.changelog.outputs.content }}
+          draft: true
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   generate-matrix:
     runs-on: ubuntu-latest
@@ -82,13 +95,13 @@ jobs:
           EOF
 
   build:
-    needs: [ push-tag, generate-matrix ]
-    # workaround, because push-tag is not always executed
+    needs: [ prepare-release, generate-matrix ]
+    # workaround, because prepare-release is not always executed
     if: |
       ${{
           needs.generate-matrix.result == 'success' && (
-              (github.event.inputs.release != 'true' && needs.push-tag.result == 'skipped') ||
-              (github.event.inputs.release == 'true' && needs.push-tag.result == 'success')
+              (github.event.inputs.release != 'true' && needs.prepare-release.result == 'skipped') ||
+              (github.event.inputs.release == 'true' && needs.prepare-release.result == 'success')
           )
       }}
     runs-on: ubuntu-22.04-arm
@@ -278,74 +291,56 @@ jobs:
 
           EOF
 
-      - name: "📋 Upload JSON"
+      - name: "📋 Upload JSON to Artifact"
+        if: ${{ matrix.rpi_json != null && github.event.inputs.release != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.IMAGE }}.json
           path: build/${{ env.IMAGE }}.json
 
-      - name: "📋 Upload Compressed Image"
+      - name: "📋 Upload Compressed Image to Artifact"
+        if: ${{ github.event.inputs.release != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.IMAGE }}.xz
           path: build/${{ env.IMAGE }}.xz
 
-      - name: "📋 Upload Compressed Image Checksum"
+      - name: "📋 Upload Compressed Image Checksum to Artifact"
+        if: ${{ github.event.inputs.release != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.IMAGE }}.xz.sha256
           path: build/${{ env.IMAGE }}.xz.sha256
 
-      - name: "📋 Upload Image Checksum"
+      - name: "📋 Upload Image Checksum to Artifact"
+        if: ${{ github.event.inputs.release != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.IMAGE }}.sha256
           path: build/${{ env.IMAGE }}.sha256
 
-  create-release:
-    needs: [ build ]
+      - name: "📋 Upload to Release"
+        run: |
+          TAG="${{ github.event.inputs.release_tag }}"
+
+          gh release upload "$TAG" "build/${{ env.IMAGE }}.sha256" --clobber
+          gh release upload "$TAG" "build/${{ env.IMAGE }}.xz" --clobber
+          gh release upload "$TAG" "build/${{ env.IMAGE }}.xz.sha256" --clobber
+
+          if [ -f "build/${{ env.IMAGE }}.json" ]; then
+            gh release upload "$TAG" "build/${{ env.IMAGE }}.json" --clobber
+          fi
+
+  finish-release:
+    needs: [ create-release ]
     if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - name: "📥 Checkout"
-        uses: actions/checkout@v4
+      - name: "Publish Release"
+        uses: eregon/publish-release@v1
         with:
-          ref: "develop"
-          fetch-depth: 0
-
-      - name: "Generate changelog"
-        id: changelog
-        uses: orhun/git-cliff-action@v2
-        with:
-          config: ./cliff-release.toml
-          args: --tag ${{ github.event.inputs.version }}
-
-      - name: "Create Release"
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: MainsailOS ${{ github.event.inputs.version }}
-          body: ${{ steps.changelog.outputs.content }}
-          draft: false
-          prerelease: false
+          id: ${{ needs.create-release.outputs.release_id }}
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Download all artifacts"
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: "Upload Release Assets"
-        run: |
-          for asset_dir in artifacts/*; do
-            for asset in "$asset_dir"/*; do
-              echo "Uploading: $asset"
-              gh release upload ${{ github.event.inputs.version }} "$asset" --clobber
-            done
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   update-changelog:
     needs: [ create-release ]
