@@ -86,8 +86,10 @@ jobs:
     # workaround, because push-tag is not always executed
     if: |
       ${{
-          needs.generate-matrix.result == 'success' &&
-          needs.push-tag.result != 'failure'
+          needs.generate-matrix.result == 'success' && (
+              (github.event.inputs.release != 'true' && needs.push-tag.result == 'skipped') ||
+              (github.event.inputs.release == 'true' && needs.push-tag.result == 'success')
+          )
       }}
     runs-on: ubuntu-22.04-arm
     strategy:
