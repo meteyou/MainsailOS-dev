@@ -88,7 +88,7 @@ jobs:
       ${{
           always() &&
           needs.generate-matrix.result == 'success' &&
-          (github.event.inputs.release == 'true' && needs.push-tag.result == 'success')
+          (github.event.inputs.release != 'true' || needs.push-tag.result == 'success')
       }}
     runs-on: ubuntu-22.04-arm
     strategy:
