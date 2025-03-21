@@ -36,7 +36,6 @@ jobs:
           echo "Version '$VERSION' is SemVer compliant."
 
       - name: "Update VERSION file, create tag and push"
-        if: steps.check_release.outputs.is_release == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -83,7 +82,14 @@ jobs:
           EOF
 
   build:
-    needs: [push-tag, generate-matrix]
+    needs: [ push-tag, generate-matrix ]
+    # workaround, because push-tag is not always executed
+    if: |
+      ${{
+          always() &&
+          needs.generate-matrix.result == 'success' &&
+          (github.event.inputs.release == 'true' || needs.push-tag.result == 'success')
+      }}
     runs-on: ubuntu-22.04-arm
     strategy:
       fail-fast: false
