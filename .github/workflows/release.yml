@@ -96,15 +96,6 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
     steps:
-      - name: "Output Debug Info"
-        run: |
-          echo "Matrix: ${{ toJson(matrix) }}"
-          echo "Branch: ${{ needs.generate-matrix.outputs.branch }}"
-          echo "Release: ${{ github.event.inputs.release }}"
-          echo "Version: ${{ github.event.inputs.version }}"
-          echo "Generate Matrix Result: ${{ needs.generate-matrix.result }}"
-          echo "Push Tag Result: ${{ needs.push-tag.result }}"
-
       - name: "📥 Checkout"
         uses: actions/checkout@v4
         with:
