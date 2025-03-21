@@ -262,7 +262,9 @@ jobs:
           rpi_data['name'] = rpi_data['name'].replace('$VERSION$', "${{ env.RELEASE_TAG }}")
 
           filename = "${{ env.IMAGE }}.xz"
-          rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/${{ env.RELEASE_TAG }}/{filename}"
+          repo = "${{ github.repository_owner }}/${{ github.repository }}"
+          release_tag = "${{ env.RELEASE_TAG }}"
+          rpi_data['url'] = f"https://github.com/{repo}/releases/download/{release_tag}/{filename}"
           rpi_data['release_date'] = "${{ env.DATE }}"
           rpi_data['extract_size'] = ${{ steps.filesizes.outputs.image }}
           rpi_data['image_download_size'] = ${{ steps.filesizes.outputs.zip }}
