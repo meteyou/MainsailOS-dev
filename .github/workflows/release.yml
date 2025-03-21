@@ -7,64 +7,68 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Als Release veröffentlichen'
+        description: 'Publish as Release'
         type: boolean
         default: false
       version:
-        description: 'Release-Version (Format: X.Y.Z)'
+        description: 'Release-Version (Format: X.Y.Z or X.Y.Z-alpha.N)'
         type: string
         required: false
 
 jobs:
-  prepare:
+  push-tag:
+    if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
-    outputs:
-      release_tag: ${{ steps.set_release_tag.outputs.release_tag }}
-      is_release: ${{ steps.check_release.outputs.is_release }}
     steps:
       - name: "📥 Checkout"
         uses: actions/checkout@v4
+        with:
+          ref: "develop"
 
-      - name: "🔎 Check if this is a release build"
-        id: check_release
+      - name: "🔎 Check release number"
         run: |
-          if [[ "${{ github.event.inputs.release }}" == "true" && "${{ github.event.inputs.version }}" != "" ]]; then
-            echo "is_release=true" >> $GITHUB_OUTPUT
-          else
-            echo "is_release=false" >> $GITHUB_OUTPUT
+          VERSION="${{ github.event.inputs.version }}"
+          if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$ ]]; then
+            echo "::error::Version '$VERSION' is not SemVer compliant. Required format: X.Y.Z or X.Y.Z-alpha.N"
+            exit 1
           fi
 
-      - name: "Set release tag"
-        id: set_release_tag
-        run: |
-          if [[ "${{ steps.check_release.outputs.is_release }}" == "true" ]]; then
-            echo "release_tag=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            RELEASE_TAG=$(cat VERSION | tr -d '\n')
-            echo "release_tag=${RELEASE_TAG}" >> $GITHUB_OUTPUT
-          fi
+          echo "Version '$VERSION' is SemVer compliant."
 
-      - name: "Create tag if release build"
+      - name: "Update VERSION file, create tag and push"
         if: steps.check_release.outputs.is_release == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag -a ${{ github.event.inputs.version }} -m "Release v${{ github.event.inputs.version }}"
+          git tag -a ${{ github.event.inputs.version }} -m "${{ github.event.inputs.version }}"
           git push origin ${{ github.event.inputs.version }}
           echo "${{ github.event.inputs.version }}" > VERSION
           git add VERSION
-          git commit -m "chore: bump version to ${{ github.event.inputs.version }}"
+          git commit -m "chore: bump version to v${{ github.event.inputs.version }}"
           git push
 
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.create-matrix.outputs.matrix }}
+      branch: ${{ steps.select_branch.outputs.branch }}
     steps:
+      - name: "Select build branch"
+        id: select_branch
+        run: |
+          if [[ "${{ github.input.release }}" == "true" ]]; then
+            echo "Using develop branch"
+            echo "branch=develop" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Using current branch"
+          echo "branch=${{ github.ref }}" >> $GITHUB_OUTPUT
+
       - name: "📥 Checkout"
         uses: actions/checkout@v4
         with:
-          ref: "develop"
+          ref: ${{ steps.select_branch.outputs.branch }}
 
       - name: "🛠 Generate matrix from config.yml"
         id: create-matrix
@@ -79,7 +83,7 @@ jobs:
           EOF
 
   build:
-    needs: [prepare, generate-matrix]
+    needs: [push-tag, generate-matrix]
     runs-on: ubuntu-22.04-arm
     strategy:
       fail-fast: false
@@ -88,7 +92,7 @@ jobs:
       - name: "📥 Checkout"
         uses: actions/checkout@v4
         with:
-          ref: "develop"
+          ref: ${{ needs.generate-matrix.outputs.branch }}
 
       - name: "#️⃣️ Set RELEASE_TAG from VERSION file"
         run: |
@@ -240,30 +244,33 @@ jobs:
 
           matrix = ${{ toJson(matrix) }}
 
-          name = matrix.get('name', '')
+          # skip if rpi_json is not defined
+          if 'rpi_json' not in matrix:
+              return
+
+          rpi_data = matrix['rpi_json'].copy()
+
+          # set name, if it is not set
+          if 'name' not in rpi_data:
+              rpi_data['name'] = "MainsailOS $VERSION$"
+
+          # replace $VERSION$ in name
           release_tag = os.environ.get("RELEASE_TAG", "unknown")
-          today = datetime.now().strftime("%Y-%m-%d")
+          rpi_data['name'] = rpi_data['name'].replace('$VERSION$', release_tag)
 
-          if 'rpi_json' in matrix and matrix['rpi_json']:
-              rpi_data = matrix['rpi_json'].copy()
+          filename = "${{ env.IMAGE }}.xz"
+          rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/{release_tag}/{filename}"
+          rpi_data['release_date'] = datetime.now().strftime("%Y-%m-%d")
+          rpi_data['extract_size'] = ${{ steps.filesizes.outputs.image }}
+          rpi_data['image_download_size'] = ${{ steps.filesizes.outputs.zip }}
+          rpi_data['extract_sha256'] = "${{ steps.hashes.outputs.image }}"
 
-              # replace $VERSION$ in name
-              if 'name' in rpi_data:
-                  rpi_data['name'] = rpi_data['name'].replace('$VERSION$', release_tag)
+          os.makedirs('build', exist_ok=True)
+          json_path = "build/${{ env.IMAGE }}.json"
+          with open(json_path, 'w') as f:
+              json.dump(rpi_data, f, indent=2)
+              print(f"Generated JSON file for {name}")
 
-              # Feste Werte setzen
-              filename = "${{ env.IMAGE }}.xz"
-              rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/{release_tag}/{filename}"
-              rpi_data['release_date'] = today
-              rpi_data['extract_size'] = ${{ steps.filesizes.outputs.image }}
-              rpi_data['image_download_size'] = ${{ steps.filesizes.outputs.zip }}
-              rpi_data['extract_sha256'] = "${{ steps.hashes.outputs.image }}"
-
-              os.makedirs('build', exist_ok=True)
-              json_path = "build/${{ env.IMAGE }}.json"
-              with open(json_path, 'w') as f:
-                  json.dump(rpi_data, f, indent=2)
-                  print(f"Generated JSON file for {name}")
           EOF
 
       - name: "📋 Upload JSON"
@@ -271,6 +278,7 @@ jobs:
         with:
           name: ${{ env.IMAGE }}.json
           path: build/${{ env.IMAGE }}.json
+
       - name: "📋 Upload Compressed Image"
         uses: actions/upload-artifact@v4
         with:
@@ -290,8 +298,8 @@ jobs:
           path: build/${{ env.IMAGE }}.sha256
 
   create-release:
-    needs: [ prepare, build ]
-    if: needs.prepare.outputs.is_release == 'true'
+    needs: [ build ]
+    if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Checkout"
@@ -305,14 +313,14 @@ jobs:
         uses: orhun/git-cliff-action@v2
         with:
           config: ./cliff-release.toml
-          args: --tag ${{ needs.prepare.outputs.release_tag }}
+          args: --tag ${{ github.event.inputs.version }}
 
       - name: "Create Release"
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.prepare.outputs.release_tag }}
-          name: MainsailOS ${{ needs.prepare.outputs.release_tag }}
+          tag_name: ${{ github.event.inputs.version }}
+          name: MainsailOS ${{ github.event.inputs.version }}
           body: ${{ steps.changelog.outputs.content }}
           draft: false
           prerelease: false
@@ -328,15 +336,15 @@ jobs:
           for asset_dir in artifacts/*; do
             for asset in "$asset_dir"/*; do
               echo "Uploading: $asset"
-              gh release upload ${{ needs.prepare.outputs.release_tag }} "$asset" --clobber
+              gh release upload ${{ github.event.inputs.version }} "$asset" --clobber
             done
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   update-changelog:
-    needs: [ prepare, create-release ]
-    if: needs.prepare.outputs.is_release == 'true'
+    needs: [ create-release ]
+    if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Checkout"
