@@ -104,6 +104,9 @@ jobs:
       - name: "#️⃣️ Set RELEASE_TAG from VERSION file"
         run: |
           RELEASE_TAG=$(cat VERSION | tr -d '\n')
+          DATE="$(date +"%Y-%m-%d")"
+
+          echo "DATE=${DATE}" >> $GITHUB_ENV
           echo "RELEASE_TAG=${RELEASE_TAG}" >> $GITHUB_ENV
 
       - name: "📁 Create directories"
@@ -205,10 +208,7 @@ jobs:
       - name: "✏ Rename image"
         working-directory: ./build
         run: |
-          RELEASE_TAG="${{ env.RELEASE_TAG }}"
-          NOW="$(date +"%Y-%m-%d")"
-
-          IMAGE="${NOW}-MainsailOS-${{ matrix.name }}-${RELEASE_TAG}.img"
+          IMAGE="${{ env.DATE }}-MainsailOS-${{ matrix.name }}-${{ env.RELEASE_TAG }}.img"
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
           mv output.img "${IMAGE}"
@@ -262,12 +262,11 @@ jobs:
               rpi_data['name'] = "MainsailOS $VERSION$"
 
           # replace $VERSION$ in name
-          release_tag = os.environ.get("RELEASE_TAG", "unknown")
-          rpi_data['name'] = rpi_data['name'].replace('$VERSION$', release_tag)
+          rpi_data['name'] = rpi_data['name'].replace('$VERSION$', "${{ env.RELEASE_TAG }}")
 
           filename = "${{ env.IMAGE }}.xz"
-          rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/{release_tag}/{filename}"
-          rpi_data['release_date'] = datetime.now().strftime("%Y-%m-%d")
+          rpi_data['url'] = f"https://github.com/mainsail-crew/MainsailOS/releases/download/${{ env.RELEASE_TAG }}/{filename}"
+          rpi_data['release_date'] = "${{ env.DATE }}"
           rpi_data['extract_size'] = ${{ steps.filesizes.outputs.image }}
           rpi_data['image_download_size'] = ${{ steps.filesizes.outputs.zip }}
           rpi_data['extract_sha256'] = "${{ steps.hashes.outputs.image }}"
