@@ -366,3 +366,22 @@ jobs:
         with:
           commit_message: "docs(changelog): update changelog"
           file_pattern: CHANGELOG.md
+
+  merge-develop-to-master:
+    needs: [ update-changelog ]
+    if: ${{ github.event.inputs.release == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          ref: "develop"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Merge develop into master with fast-forward"
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git checkout master
+          git merge --ff-only develop
+          git push origin main
