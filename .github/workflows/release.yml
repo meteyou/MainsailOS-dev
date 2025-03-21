@@ -320,8 +320,10 @@ jobs:
           path: build/${{ env.IMAGE }}.sha256
 
       - name: "📋 Upload to Release"
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="${{ github.event.inputs.release_tag }}"
+          TAG="${{ env.RELEASE_TAG }}"
 
           gh release upload "$TAG" "build/${{ env.IMAGE }}.sha256" --clobber
           gh release upload "$TAG" "build/${{ env.IMAGE }}.xz" --clobber
