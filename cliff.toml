@@ -73,6 +73,7 @@ commit_parsers = [
     { message = "^locale(\\(.*\\))?:", group = "<!-- 6 -->Localization"},
     { message = "^docs(\\(.*\\))?:", group = "<!-- 7 -->Documentation"},
     { message = "^test(\\(.*\\))?:", group = "<!-- 8 -->Other"},
+    { message = "^ci(\\(.*\\))?:", group = "<!-- 8 -->Other"},
     { message = "^chore(\\(.*\\))?:", group = "<!-- 8 -->Other"},
 
     { body = ".*security", group = "Security"},
