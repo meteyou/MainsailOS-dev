@@ -356,7 +356,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        run: gh release edit "${{ env.RELEASE_TAG }}" --draft=false
+        run: gh release edit "${{ github.event.inputs.version }}" --draft=false
 
   update-changelog:
     needs: [ build ]
@@ -388,16 +388,16 @@ jobs:
     if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: "📥 Checkout"
         uses: actions/checkout@v4
         with:
-          ref: "develop"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: "master"
+          fetch-depth: 0
 
-      - name: "Merge develop into master with fast-forward"
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git checkout master
-          git merge --ff-only develop
-          git push origin master
+      - name: "FF merge to master"
+        uses: MaximeHeckel/github-action-merge-fast-forward@v1.1.0
+        with:
+          branchtomerge: origin/develop
+          branch: master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
