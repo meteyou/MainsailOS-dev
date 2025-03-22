@@ -246,6 +246,7 @@ jobs:
           echo -e "\e[32mUsing ${CPU_COUNT} Cores for compression...\e[0m"
           # xz -efkvz9T"${CPU_COUNT}" ${{ env.IMAGE }} || true
           touch ${{ env.IMAGE }}.xz
+          echo "Fake compressed image file" > ${{ env.IMAGE }}.xz
 
       - name: "🔐 Create hash"
         id: hashes
