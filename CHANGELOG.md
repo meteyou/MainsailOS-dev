@@ -2,7 +2,16 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.22](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.22) - 2025-03-22
+### Other
+
+- Bump version to v2.0.22
+
 ## [2.0.21](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.21) - 2025-03-22
+### Documentation
+
+- Add ci to changelogs
+
 ### Other
 
 - Bump version to v2.0.21
@@ -11,66 +20,86 @@ All notable changes to MainsailOS will be documented in this file.
 ### Other
 
 - Bump version to v2.0.19
+- Split git commands in single steps in the prepare-release job
+- Fetch all commits in prepare-release step to read the last tag
+- Fix changelog.md generation
 - Bump version to v2.0.20
 
 ## [2.0.19](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.19) - 2025-03-22
 ### Other
 
+- Fix ff merge
 - Bump version to v2.0.18
 
 ## [2.0.18](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.18) - 2025-03-22
 ### Other
 
+- Fix fake compressed image file
 - Bump version to v2.0.17
 
 ## [2.0.17](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.17) - 2025-03-22
 ### Other
 
+- Use fake compressed file
+- Fix release tag in publish release step
+- Fix branch name in merge-developt-to-master step
 - Bump version to v2.0.16
 
 ## [2.0.16](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.16) - 2025-03-22
 ### Other
 
+- Fix changelog in release
+- Fix publish release step
 - Bump version to v2.0.15
 
 ## [2.0.15](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.15) - 2025-03-21
 ### Other
 
+- Enable compressing image
 - Bump version to v2.0.14
 
 ## [2.0.14](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.14) - 2025-03-21
 ### Other
 
+- Fix upload to release
 - Bump version to v2.0.13
 
 ## [2.0.13](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.13) - 2025-03-21
 ### Other
 
+- Fix release upload
+- Add merge develop-to-master job
 - Bump version to v2.0.11
+- Fix needs from finish-release and update-changelog
 
 ## [2.0.11](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.11) - 2025-03-21
 ### Other
 
+- Fake compress image step
 - Bump version to v2.0.10
 
 ## [2.0.10](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.10) - 2025-03-21
 ### Other
 
 - Bump version to v2.0.9
+- Fake compress image step
 
 ## [2.0.9](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.9) - 2025-03-21
 ### Other
 
+- Fake compress image step
 - Bump version to v2.0.8
 
 ## [2.0.8](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.8) - 2025-03-21
 ### Other
 
+- Fix rpi json generation
 - Bump version to v2.0.7
 
 ## [2.0.7](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.7) - 2025-03-21
 ### Other
 
+- Fix rpi json generation
 - Bump version to v2.0.6
 
 ## [2.0.6](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.6) - 2025-03-21
@@ -81,26 +110,38 @@ All notable changes to MainsailOS will be documented in this file.
 ## [2.0.5](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.5) - 2025-03-21
 ### Other
 
+- Fix build job dependencies
 - Bump version to v1.2.3
 
 ## [1.2.3](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.2.3) - 2025-03-21
 ### Other
 
+- Fix prepare release and push tag
 - Bump version to 2.0.4
+- Fix build job dependencies
+- Fix build job dependencies
+- Fix build job dependencies
+- Fix build job dependencies
+- Add debug outputs
+- Fix build job dependencies
+- Fix build job dependencies
 
 ## [2.0.4](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.4) - 2025-03-13
 ### Other
 
+- Test for rpi json
 - Bump version to 2.0.3
 
 ## [2.0.3](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.3) - 2025-03-13
 ### Other
 
 - Bump version to 2.0.2
+- Fix typo in release.yml
 
 ## [2.0.2](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.2) - 2025-03-12
 ### Other
 
+- Use fake image and fix gh release upload tag
 - Bump version to 2.0.1
 
 ## [2.0.1](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.1) - 2025-03-12
@@ -327,6 +368,10 @@ All notable changes to MainsailOS will be documented in this file.
 - **build**: Add new matrix workflow ([#253](https://github.com/mainsail-crew/MainsailOS/pull/253))
 - **build**: Add bullseye control group
 - **ci**: Skip build on push to master branch ([#280](https://github.com/mainsail-crew/MainsailOS/pull/280))
+- **release**: Skip the ftp upload, if repo != Mainsail-Crew ([#269](https://github.com/mainsail-crew/MainsailOS/pull/269))
+- **release**: Generate changelog from 0.0.0, if repo != Mainsail-Crew ([#270](https://github.com/mainsail-crew/MainsailOS/pull/270))
+- **release**: Update publish release action ([#268](https://github.com/mainsail-crew/MainsailOS/pull/268))
+- **release**: Fix changelog workflow ([#271](https://github.com/mainsail-crew/MainsailOS/pull/271))
 - Remove unattended-upgrades service ([#215](https://github.com/mainsail-crew/MainsailOS/pull/215))
 - Revert firstboot fix ([#219](https://github.com/mainsail-crew/MainsailOS/pull/219))
 - Update crowsnest module ([#221](https://github.com/mainsail-crew/MainsailOS/pull/221))
@@ -363,10 +408,37 @@ All notable changes to MainsailOS will be documented in this file.
 - Update wifi-readme.txt
 - Reenable pkgupgrade for ks version
 - Update headless_nm.txt.template
+- Add python3-git to install dependencies in build workflow
+- Change custompios repo
+- Test to export BASE_BOARD
+- Change branch to fix-branch
 - Upload VERSION file
+- Add fast-fail:false to the build chain
 - Switch CustoPiZer to my fork
+- Add emojis to all steps
+- Remove debug outputs
 - Hide output for apt-mark and unhold in 00-dist-upgrade
+- Test ubuntu-22.04-arm64 runner instead of ubuntu-latest
+- Fix runner to ubuntu-24.04-arm
+- Fix runner to ubuntu-22.04-arm
+- Disable dist-upgrade to speedup test builds
+- Change emoji for set RELEASE_TAG from VERSION file
 - Set DEBIAN_FRONTEND to noninteractive in 00-dist-upgrade
+- Test CI on ubuntu-latest (non arm)
+- Move back to ubuntu-22.04-arm runner
+- Fix verify image
+- Double check verify image with wrong hash
+- Reset raspi hash url
+- Remove unnecessary delete command from the hash file
+- Refactor build.xml and use working-directory
+- Add function to disable modules, when the module name ends with ".disabled"
+- Disable 11-armbian-net module
+- Fix issue, when no disabled module exists
+- Fix issue, when no disabled module exists
+- Disable DHT (Distributed Hash Table) in aria2c
+- Add date into filename
+- Upload release workflow
+- Fix CustoPiZer action version
 
 ## [1.1.0](https://github.com/mainsail-crew/MainsailOS/releases/tag/1.1.0) - 2023-03-15
 ### Features
