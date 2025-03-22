@@ -399,4 +399,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git checkout master
           git merge --ff-only develop
-          git push origin main
+          git push origin master
