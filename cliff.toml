@@ -61,6 +61,7 @@ commit_parsers = [
     # Commits to skip
     { message = "^docs\\(changelog\\):", group = "Changelog", skip = true}, # Old redundant commits
     { message = "^chore: push version number to", group = "9$Other", skip = true}, # Old redundant commits
+    { message = "^chore: Bump version to", group = "9$Other", skip = true}, # Old redundant commits
     { message = "^chore\\(changelog\\): update changelog", group = "Changelog", skip = true}, # Old redundant commits
 
     # Commits to parse
