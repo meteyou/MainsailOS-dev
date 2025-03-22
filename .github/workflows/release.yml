@@ -382,13 +382,19 @@ jobs:
         id: git-cliff
         with:
           config: cliff.toml
-          args: --output CHANGELOG.md
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: "Setup git config"
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
 
       - name: "Commit updated changelog"
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "docs(changelog): update changelog"
-          file_pattern: CHANGELOG.md
+        run: |
+          git add CHANGELOG.md
+          git commit -m "docs(changelog): update changelog"
+          git push
 
   merge-develop-to-master:
     needs: [ update-changelog ]
