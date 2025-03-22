@@ -43,22 +43,28 @@ jobs:
         run: |
           echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
 
-      - name: "Update VERSION file, create tag and push"
+      - name: "Setup git config"
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag -a ${{ github.event.inputs.version }} -m "${{ github.event.inputs.version }}"
-          git push origin ${{ github.event.inputs.version }}
+
+      - name: "Update VERSION file"
+        run: |
           echo "${{ github.event.inputs.version }}" > VERSION
           git add VERSION
           git commit -m "chore: bump version to v${{ github.event.inputs.version }}"
           git push
 
+      - name: "Push tag"
+        run: |
+          git tag -a ${{ github.event.inputs.version }} -m "${{ github.event.inputs.version }}"
+          git push origin ${{ github.event.inputs.version }}
+
       - name: "Generate a changelog"
         uses: orhun/git-cliff-action@v4
         id: changelog
         with:
-          config: ./cliff-release.toml
+          config: cliff-release.toml
           args: ${{ steps.latest_tag.outputs.TAG_NAME }}..HEAD
 
       - name: "Create Release"
@@ -371,7 +377,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Generate a changelog"
-        uses: orhun/git-cliff-action@v2
+        uses: orhun/git-cliff-action@v4
         id: git-cliff
         with:
           config: cliff.toml
