@@ -37,6 +37,12 @@ jobs:
 
           echo "Version '$VERSION' is SemVer compliant."
 
+      - name: "Get latest tag"
+        id: latest_tag
+        shell: bash
+        run: |
+          echo "TAG_NAME=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_OUTPUT
+
       - name: "Update VERSION file, create tag and push"
         run: |
           git config --local user.email "action@github.com"
@@ -47,6 +53,13 @@ jobs:
           git add VERSION
           git commit -m "chore: bump version to v${{ github.event.inputs.version }}"
           git push
+
+      - name: "Generate a changelog"
+        uses: orhun/git-cliff-action@v4
+        id: changelog
+        with:
+          config: ./cliff-release.toml
+          args: ${{ steps.latest_tag.outputs.TAG_NAME }}..HEAD
 
       - name: "Create Release"
         id: create_release
