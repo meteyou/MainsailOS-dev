@@ -42,6 +42,10 @@
     IMAGE_ENLARGEROOT: 5000
   special_modules:
     - 20-opi-4lts-spi
+  rpi_json:
+    name: "MainsailOS $VERSION$ - Orange Pi 4 LTS (64-bit)"
+    description: "A port of Armbian with preinstalled Klipper/Moonraker/Mainsail for 3D printers"
+    icon: "https://os.mainsail.xyz/rpi-imager.png"
 
 - name: armbian-orangepi3_lts-bookworm
   type: armbian
@@ -53,6 +57,10 @@
     IMAGE_ENLARGEROOT: 5000
   special_modules:
     - 20-opi-3lts-spi
+  rpi_json:
+    name: "MainsailOS $VERSION$ - Orange Pi 4 LTS (64-bit)"
+    description: "A port of Armbian with preinstalled Klipper/Moonraker/Mainsail for 3D printers"
+    icon: "https://os.mainsail.xyz/rpi-imager.png"
 
 - name: armbian-orangepi_zero2-bookworm
   type: armbian
@@ -64,3 +72,7 @@
     IMAGE_ENLARGEROOT: 5000
   special_modules:
     - 20-opi-zero2
+  rpi_json:
+    name: "MainsailOS $VERSION$ - Orange Pi Zero2 (64-bit)"
+    description: "A port of Armbian with preinstalled Klipper/Moonraker/Mainsail for 3D printers"
+    icon: "https://os.mainsail.xyz/rpi-imager.png"
