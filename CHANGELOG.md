@@ -2,7 +2,16 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.23](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.23) - 2025-03-22
+### Other
+
+- Bump version to v2.0.23
+
 ## [2.0.22](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.22) - 2025-03-22
+### Documentation
+
+- Hide pump version commits form changelog
+
 ### Other
 
 - Bump version to v2.0.22
