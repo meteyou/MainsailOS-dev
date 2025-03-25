@@ -2,7 +2,19 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.25](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.25) - 2025-03-25
+### Other
+
+- Fix release workflow for only builds
+- Rename workflow for build & release
+- Add job to finish rpi json and upload it
+- Bump version to v2.0.25
+
 ## [2.0.24](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.24) - 2025-03-23
+### Bug Fixes and Improvements
+
+- Add orangepi images to rpi.json
+
 ### Other
 
 - Bump version to v2.0.24
