@@ -2,6 +2,12 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.26](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.26) - 2025-03-26
+### Other
+
+- Fix version in step upload to remote server
+- Bump version to v2.0.26
+
 ## [2.0.25](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.25) - 2025-03-25
 ### Other
 
