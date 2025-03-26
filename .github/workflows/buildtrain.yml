@@ -367,7 +367,7 @@ jobs:
         run: gh release edit "${{ github.event.inputs.version }}" --draft=false
 
   update-rpi-imager:
-    needs: [ build ]
+    needs: [ finish-release ]
     if: ${{ github.event.inputs.release == 'true' }}
     runs-on: ubuntu-latest
     steps:
