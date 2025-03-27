@@ -2,9 +2,15 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.29](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.29) - 2025-03-27
+### Other
+
+- Bump version to v2.0.29
+
 ## [2.0.28](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.28) - 2025-03-27
 ### Other
 
+- Fix upload rpi-imager.json
 - Bump version to v2.0.28
 
 ## [2.0.27](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.27) - 2025-03-26
