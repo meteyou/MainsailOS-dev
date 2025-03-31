@@ -2,9 +2,21 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.31](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.31) - 2025-03-31
+### Other
+
+- Bump version to v2.0.31
+
+## [2.0.30](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.30) - 2025-03-31
+### Other
+
+- Fix config.yml
+- Bump version to v2.0.30
+
 ## [2.0.29](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.29) - 2025-03-27
 ### Other
 
+- Add devices for rpi json to opi images
 - Bump version to v2.0.29
 
 ## [2.0.28](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.28) - 2025-03-27
