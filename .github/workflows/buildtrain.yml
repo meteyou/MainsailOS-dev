@@ -226,7 +226,7 @@ jobs:
         run: ls -la
 
       - name: "🏗 Run CustoPiZer"
-        uses: meteyou/CustoPiZer-dev@main
+        uses: OctoPrint/CustoPiZer@v1
         with:
           workspace: "${{ github.workspace }}/build"
           scripts:  "${{ github.workspace }}/scripts"
@@ -313,33 +313,17 @@ jobs:
 
           EOF
 
-      - name: "📋 Upload JSON to Artifact"
-        if: ${{ matrix.rpi_json != null && github.event.inputs.release != 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.IMAGE }}.json
-          path: build/${{ env.IMAGE }}.json
-
-      - name: "📋 Upload Compressed Image to Artifact"
+      - name: "📋 Upload Artifacts"
         if: ${{ github.event.inputs.release != 'true' }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.IMAGE }}.xz
-          path: build/${{ env.IMAGE }}.xz
-
-      - name: "📋 Upload Compressed Image Checksum to Artifact"
-        if: ${{ github.event.inputs.release != 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.IMAGE }}.xz.sha256
-          path: build/${{ env.IMAGE }}.xz.sha256
-
-      - name: "📋 Upload Image Checksum to Artifact"
-        if: ${{ github.event.inputs.release != 'true' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.IMAGE }}.sha256
-          path: build/${{ env.IMAGE }}.sha256
+          name: ${{ env.IMAGE }}-artifacts
+          path: |
+            build/${{ env.IMAGE }}.json
+            build/${{ env.IMAGE }}.xz
+            build/${{ env.IMAGE }}.xz.sha256
+            build/${{ env.IMAGE }}.sha256
+          if-no-files-found: ignore
 
       - name: "📋 Upload to Release"
         if: ${{ github.event.inputs.release == 'true' }}
