@@ -2,10 +2,47 @@
 # Changelog
 All notable changes to MainsailOS will be documented in this file.
 
+## [2.0.34](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.34) - 2025-04-08
+### Bug Fixes and Improvements
+
+- Set to main branch of sonar
+
+### Refactor
+
+- Split release and build (pullrequest) workflow
+
+### Other
+
+- Refactor release workflow
+- Switch to production images
+- Update buildtrain from develop
+- Add job to finish rpi json and upload it
+- Fix version in step upload to remote server
+- Fix upload rpi-imager.json
+- Fix upload rpi-imager.json
+- Add devices for rpi json to opi images
+- Fix config.yml
+- Fix typo in config.yml
+- Fix repo link in rpi-imager.json
+- Only upload to release, when it was a release
+- Combine upload artifacts steps
+- Bump version to v2.0.34
+
+## [2.0.33](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.33) - 2025-04-08
+### Refactor
+
+- Split release and build (pullrequest) workflow
+
+### Other
+
+- Combine upload artifacts steps
+- Bump version to v2.0.33
+
 ## [2.0.32](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.32) - 2025-04-01
 ### Other
 
 - Fix repo link in rpi-imager.json
+- Only upload to release, when it was a release
 - Bump version to v2.0.32
 
 ## [2.0.31](https://github.com/mainsail-crew/MainsailOS/releases/tag/2.0.31) - 2025-03-31
